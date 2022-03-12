@@ -13,7 +13,7 @@ def printGeneration(aGeneration):
 
 
 def next_generation(cells: list[bool], rule: int) -> list[bool]:
-    extended = [0] + cells + [0]
+    extended = [False] + cells + [False]
     return [
         rule & (1 << left * 4 + cell * 2 + right) != 0
         for left, cell, right
