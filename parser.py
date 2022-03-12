@@ -7,6 +7,10 @@ class Parser:
     STATE_ERROR = 2
 
     def __init__(self) -> None:
+        self.type = ""
+        self.rule = -1
+        self.cells: list[bool] = []
+        self.generations = 0
         self.state = Parser.STATE_PARSING
         self._parse_func = self._read_type
 
@@ -72,6 +76,6 @@ class Parser:
             if result < 1:
                 self.state = Parser.STATE_ERROR
             return result
-        except:
+        except ValueError:
             self.state = Parser.STATE_ERROR
             return -1
