@@ -30,3 +30,19 @@ def test_parse_b():
     assert parser.cells == expected_cells
     assert parser.generations == 20
     assert parser.rule == 86
+
+
+def test_parse_u_129():
+    parser = Parser()
+    parser.parse("U 61 20")
+    parser.parse("init_start 30 init_end")
+    parser.parse("1 0 0 0 0 0 0 1")
+
+    expected_cells = [False] * 61
+    expected_cells[29] = True
+
+    assert parser.state == Parser.STATE_FINAL
+    assert parser.type == "U"
+    assert parser.cells == expected_cells
+    assert parser.generations == 20
+    assert parser.rule == 129

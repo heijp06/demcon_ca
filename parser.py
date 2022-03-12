@@ -35,14 +35,14 @@ class Parser:
         self._parse_func = self._read_length
 
     def _read_length(self, field: str) -> None:
-        length = self._read_integer(field)
+        length = self._parse_integer(field)
         if self.state == Parser.STATE_ERROR:
             return
         self.cells = [False] * length
         self._parse_func = self._read_generations
 
     def _read_generations(self, field: str) -> None:
-        generations = self._read_integer(field)
+        generations = self._parse_integer(field)
         if self.state == Parser.STATE_ERROR:
             return
         self.generations = generations
@@ -59,18 +59,26 @@ class Parser:
             if self.type in "AB":
                 self.state = Parser.STATE_FINAL
             else:
-                self._parse_func = partial(self._read_bit, 0)
+                self._parse_func = partial(self._read_bit, 1)
             return
-        occupied = self._read_integer(field)
+        occupied = self._parse_integer(field)
         if self.state == Parser.STATE_ERROR:
             return
         if occupied < len(self.cells):
             self.cells[occupied - 1] = True
 
     def _read_bit(self, bit: int, field: str) -> None:
-        pass
+        if field not in "01":
+            self.state == Parser.STATE_ERROR
+            return
+        if field == "1":
+            self.rule += bit
+        if bit == 128:
+            self.state = Parser.STATE_FINAL
+        else:
+            self._parse_func = partial(self._read_bit, bit * 2)
 
-    def _read_integer(self, field: str) -> int:
+    def _parse_integer(self, field: str) -> int:
         try:
             result = int(field)
             if result < 1:
