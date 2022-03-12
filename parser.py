@@ -64,7 +64,7 @@ class Parser:
         occupied = self._parse_integer(field)
         if self.state == Parser.STATE_ERROR:
             return
-        if occupied < len(self.cells):
+        if occupied <= len(self.cells):
             self.cells[occupied - 1] = True
 
     def _read_bit(self, bit: int, field: str) -> None:
