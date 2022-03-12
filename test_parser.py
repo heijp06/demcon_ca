@@ -6,8 +6,8 @@ def test_parse_a():
     parser.parse("A 11 10")
     parser.parse("init_start 6 init_end")
 
-    expected_cells = [0] * 11
-    expected_cells[5] = 1
+    expected_cells = [False] * 11
+    expected_cells[5] = True
 
     assert parser.state == Parser.STATE_FINAL
     assert parser.type == "A"
@@ -21,9 +21,9 @@ def test_parse_b():
     parser.parse("B 61 20")
     parser.parse("init_start 20 40 init_end")
 
-    expected_cells = [0] * 61
-    expected_cells[19] = 1
-    expected_cells[39] = 1
+    expected_cells = [False] * 61
+    expected_cells[19] = True
+    expected_cells[39] = True
 
     assert parser.state == Parser.STATE_FINAL
     assert parser.type == "B"

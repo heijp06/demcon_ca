@@ -1,5 +1,6 @@
 from functools import partial
 
+
 class Parser:
     STATE_PARSING = 0
     STATE_FINAL = 1
@@ -33,7 +34,7 @@ class Parser:
         length = self._read_integer(field)
         if self.state == Parser.STATE_ERROR:
             return
-        self.cells = [0] * length
+        self.cells = [False] * length
         self._parse_func = self._read_generations
 
     def _read_generations(self, field: str) -> None:
@@ -42,13 +43,13 @@ class Parser:
             return
         self.generations = generations
         self._parse_func = self._read_init_start
-    
+
     def _read_init_start(self, field: str) -> None:
         if field != "init_start":
             self.state = Parser.STATE_ERROR
             return
         self._parse_func = self._read_occupied
-    
+
     def _read_occupied(self, field: str) -> None:
         if field == "init_end":
             if self.type in "AB":
@@ -60,7 +61,7 @@ class Parser:
         if self.state == Parser.STATE_ERROR:
             return
         if occupied < len(self.cells):
-            self.cells[occupied - 1] = 1
+            self.cells[occupied - 1] = True
 
     def _read_bit(self, bit: int, field: str) -> None:
         pass
