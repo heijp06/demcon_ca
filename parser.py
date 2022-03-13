@@ -1,4 +1,5 @@
 from functools import partial
+from cellular_automaton import CA
 
 
 class Parser:
@@ -20,6 +21,11 @@ class Parser:
                 self.state = Parser.STATE_ERROR
                 return
             self._parse_func(field)
+
+    def create_ca(self) -> CA:
+        if self.state != Parser.STATE_FINAL:
+            raise ValueError("Invalid state.")
+        return CA(self.cells, self.rule)
 
     def _read_type(self, field: str) -> None:
         if field not in "ABU":
@@ -69,7 +75,7 @@ class Parser:
 
     def _read_bit(self, bit: int, field: str) -> None:
         if field not in "01":
-            self.state == Parser.STATE_ERROR
+            self.state = Parser.STATE_ERROR
             return
         if field == "1":
             self.rule += bit

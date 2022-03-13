@@ -12,15 +12,6 @@ def printGeneration(aGeneration):
     print(myprintString)
 
 
-def next_generation(cells: list[bool], rule: int) -> list[bool]:
-    extended = [False] + cells + [False]
-    return [
-        rule & (1 << left * 4 + cell * 2 + right) != 0
-        for left, cell, right
-        in zip(extended, extended[1:], extended[2:])
-    ]
-
-
 if __name__ == "__main__":
     parser = Parser()
 
@@ -30,9 +21,10 @@ if __name__ == "__main__":
     if parser.state == Parser.STATE_ERROR:
         sys.exit("Illegal input.")
 
-    cells = parser.cells
-    printGeneration(cells)
+    ca = parser.create_ca()
+
+    printGeneration(ca.cells)
 
     for _ in range(1, parser.generations):
-        cells = next_generation(cells, parser.rule)
-        printGeneration(cells)
+        ca.next_generation()
+        printGeneration(ca.cells)
